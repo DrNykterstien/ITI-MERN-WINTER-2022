@@ -1,0 +1,19 @@
+{
+  "name": "iti-mern-winter-2022",
+  "version": "1.0.0",
+  "description": "ITI MERN winter training 2022",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrNykterstien/ITI-MERN-WINTER-2022.git"
+  },
+  "author": "Abdulla Nasser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DrNykterstien/ITI-MERN-WINTER-2022/issues"
+  },
+  "homepage": "https://github.com/DrNykterstien/ITI-MERN-WINTER-2022#readme"
+}

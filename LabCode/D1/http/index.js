@@ -50,6 +50,15 @@ const httpServer = http.createServer(function (req, res) {
             res.write(html)
             res.end()
         })
+    } else if(req.url == '/iti-logo.png'){
+        res.setHeader('Content-Type', 'image/png')
+        fs.readFile('../iti-logo.png', function(err, img) {
+            if (err) {
+                throw err; 
+            }
+            res.write(img)
+            res.end()
+        })
     } else {
         res.write("<h1>404 not found</h1>")
         res.end()

@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const user = require('../models/user');
+const todo = require('../models/todo');
 const jwt = require('jsonwebtoken');
 
 router.get('/', (req, res) => {
-    const users = user.find({});
-    res.json({users});
+    const users = user.find({}).exec(function (err, usrs) {
+        const l = usrs.map(usr => {
+            return usr.firstName
+        })
+        res.json({users: l});
+    });
 })
 
 router.post('/register', (req, res) => {
@@ -21,7 +26,7 @@ router.post('/register', (req, res) => {
         var newUser = new user(obj);
         newUser.save(function(err, usr){
             if(err) {
-                res.json({message: 'error registering new user', success: false})
+                res.json({message: 'error registering new user', success: false, error: err})
             } else {
                 const token = jwt.sign({username, password}, "secretKey")
                 res.json({
@@ -40,21 +45,29 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     const {username, password} = req.body;
     if (username && password) {
-        const result = user.findOne({username: username, password: password})
-        if (result) {
-            const token = jwt.sign({username, password}, "secretKey")
-            res.json({
-                message: 'logged in successfully', 
-                success: true,
-                token
-            })
-        } else {
-            res.json({
-                message: 'error while login', 
-                success: false
-            })
-        }
-        
+        user.findOne({username: username, password: password}).exec(function (err, usr) {
+            if (err){
+                res.json({
+                    message: 'error while login', 
+                    success: false, 
+                    error: err
+                })
+            } else {
+                if (usr) {
+                    todo.find({userId: usr.userId}).exec(function (err, tds) {
+                        const token = jwt.sign({username, password}, "secretKey")
+                        res.json({
+                            message: 'logged in successfully', 
+                            success: true,
+                            token,
+                            todos: tds
+                        })
+                    })
+                } else {
+                    res.json({message: 'invalid credentials', success: false})
+                }
+            }
+        })
     } else {
         res.json({message: 'username and password are required', success: false})
     }

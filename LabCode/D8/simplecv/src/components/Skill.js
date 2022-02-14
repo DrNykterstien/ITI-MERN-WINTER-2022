@@ -9,7 +9,7 @@ function Skill(props) {
     <>
       <p>{info.name}</p>
       <div class="container">
-        <div class="skills html">{info.percentage}%</div>
+        <div class={props.class}>{info.percentage}%</div>
       </div>
       <p style={{color: props.color}}>Our Color: {props.color}</p>
     </>
